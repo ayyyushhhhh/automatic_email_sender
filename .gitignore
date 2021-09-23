@@ -1,0 +1,3 @@
+# Ignoring the pdf and csv used for testing purposes
+*.pdf
+*.csv
