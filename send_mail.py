@@ -34,7 +34,7 @@ class Mail:
         
         body =MIMEText(self.__message_body(name),_subtype='plain', _charset='UTF-8')
         self.message.attach(body)
-        pass
+     
 
 
     def send_mail(self,connection_name:str,connection_number:int
@@ -48,18 +48,28 @@ class Mail:
             # loging to the to the server 
             try:
                 server.login(sender_email, sender_password)
-            except:
-                print("unknown Error Occured") 
+            except smtplib.SMTPAuthenticationError:
+                print("Wrong Password ") 
                 return
+            else:
+                print("Unknown Error Occured")
 
-            print("sending please, wait...")
+            # adding reciever message
             self.message["To"] = reciever.email
+
+            # add message to the message body
             self.add_body(reciever.name)
+
+            #add attachment
             self.add_attachment(f"{reciever.name}.pdf")
+
+            #convert message object to string as the sendmail takes string as input
             self.message = self.message.as_string()
+
             # send mail 
             server.sendmail(sender_email,reciever.email, self.message)
+
             # quit server
             server.quit()
 
-            print("All Emails sent.., have a nice day")
+      
